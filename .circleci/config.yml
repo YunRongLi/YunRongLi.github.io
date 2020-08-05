@@ -12,9 +12,54 @@ jobs:
           - run:
               name: Test
               command: pytest
+  docs-build:
+    docker:
+      - image: python:3.7
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: pip install -r requirements.txt
+      - run:
+          name: Build docs
+          command: cd docs/ && make html
+      - persist_to_workspace:
+          root: docs/build
+          paths: html
 
-  workflows:
-    version: 2
-      build:
-        jobs:
-          - test
+  docs-deploy:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: docs/build
+      - run:
+          name: Disable jekyll builds
+          command: touch docs/build/html/.nojekyll
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages@3.1.0
+            git config user.email "402350424@gms.tku.edu.tw"
+            git config user.name  "YunRongLi"
+      - add_ssh_keys:
+          fingerprints:
+            - "de:de:47:6e:35:2a:0a:b4:16:d6:33:93:aa:52:db:48"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: gh-pages --dotfiles --message "[skip ci] Updates" --dist docs/build/html
+
+workflows:
+  version: 2
+    build:
+      jobs:
+        - test
+        - docs-build
+        - docs-deploy:
+            requires:
+              - test
+              - docs-build
+            filters:
+              branches:
+                only: master
