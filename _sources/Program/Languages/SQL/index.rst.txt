@@ -1,8 +1,7 @@
 SQL Doc
 ==========================================
-Chapters
+Syntax
 ------------------------------------------
-
 .. toctree::
-
-    Syntax/index
+    Syntax/datatypes
+    Syntax/table
