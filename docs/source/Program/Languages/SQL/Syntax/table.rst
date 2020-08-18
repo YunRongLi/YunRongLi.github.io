@@ -36,3 +36,11 @@ Drop Column in Table
 ---------------------------------------------
 Data Manipulation Language (DML)
 ---------------------------------------------
+
+Insert new data into Table
+---------------------------------------------
+ ::
+
+    INSERT INTO 'DataBase_Name'.'Table_Name'
+    VALUES (value1, value2, value3, ...);
+
