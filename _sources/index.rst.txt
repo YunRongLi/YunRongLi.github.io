@@ -6,3 +6,4 @@ Welcome YunRong website
    :caption: Contents:
 
    Program/Languages/SQL/index
+   Program/Languages/Python/index
